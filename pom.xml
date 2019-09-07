@@ -26,7 +26,7 @@
         </dependency>
 
         <!--引入的代替JSP的thymeleaf依赖-->
-       <dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
@@ -68,7 +68,7 @@
 
         <!--引入JDBC依赖-->
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
@@ -86,7 +86,28 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--引入数据库合并管理工具-->
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>6.0.1</version>
+                <configuration>
+                    <url>jdbc:h2:E:/Program Files/h2database/skycommunity</url>
+                    <user>sa</user>
+                    <password>123</password>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.199</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
+
     </build>
+
 
 </project>

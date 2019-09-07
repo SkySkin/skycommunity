@@ -14,7 +14,7 @@
 [Java发送POST请求--OkHttp工具](https://square.github.io/okhttp/)  
 [springboot整合mybatis](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)  
 [spring的数据源配置](https://docs.spring.io/spring-boot/docs/2.1.9.BUILD-SNAPSHOT/reference/html/boot-features-sql.html#boot-features-embedded-database-support)  
-
+[数据库的插件](https://flywaydb.org/getstarted/firststeps/commandline)
 
 
 
@@ -33,8 +33,7 @@ chrome中打开匿名窗口 ctrl+shift+n
 -- auto-generated definition
 create table USER
 (
-  ID           INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_CA79EF02_43A0_44F7_8B12_A6AB876AC281)
-    primary key,
+  ID int auto_increment primary key not null ,
   NAME         VARCHAR(50),
   ACCOUNT_ID   VARCHAR(100),
   TOKEN        CHAR(36),
