@@ -1,4 +1,4 @@
-## Sky社区
+# Sky社区
 
 ## 资料
 [spring 文档](https://spring.io/guides/)    
@@ -11,9 +11,34 @@
 [利用github进行登陆的API](https://developer.github.com/apps/building-oauth-apps/creating-an-oauth-app/)   
 [注册github用于登陆的应用](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)   
 [时序图设计软件](https://www.visual-paradigm.com)   
-[Java发送POST请求--OkHttp工具](https://square.github.io/okhttp/)
+[Java发送POST请求--OkHttp工具](https://square.github.io/okhttp/)  
+[springboot整合mybatis](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)  
+[spring的数据源配置](https://docs.spring.io/spring-boot/docs/2.1.9.BUILD-SNAPSHOT/reference/html/boot-features-sql.html#boot-features-embedded-database-support)  
+
+
 
 
 ## 快捷键
 
 chrome中打开匿名窗口 ctrl+shift+n
+
+
+## 笔记
+网络直接数据传输用【dto】  
+数据库中传输用【model/pojo】
+
+
+## 脚本
+```sql    
+-- auto-generated definition
+create table USER
+(
+  ID           INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_CA79EF02_43A0_44F7_8B12_A6AB876AC281)
+    primary key,
+  NAME         VARCHAR(50),
+  ACCOUNT_ID   VARCHAR(100),
+  TOKEN        CHAR(36),
+  GMT_CREATE   BIGINT,
+  GMT_MODIFIED BIGINT
+);
+
