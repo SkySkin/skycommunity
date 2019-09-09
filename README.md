@@ -14,7 +14,7 @@
 [Java发送POST请求--OkHttp工具](https://square.github.io/okhttp/)  
 [springboot整合mybatis](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)  
 [spring的数据源配置](https://docs.spring.io/spring-boot/docs/2.1.9.BUILD-SNAPSHOT/reference/html/boot-features-sql.html#boot-features-embedded-database-support)  
-[数据库的插件](https://flywaydb.org/getstarted/firststeps/commandline)
+[数据库sql自动运行的插件](https://flywaydb.org/getstarted/firststeps/commandline)
 
 
 
