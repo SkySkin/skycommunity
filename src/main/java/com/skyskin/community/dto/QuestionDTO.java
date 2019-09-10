@@ -1,15 +1,17 @@
-package com.skyskin.community.model;
+package com.skyskin.community.dto;
 
+import com.skyskin.community.model.User;
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * @author Rock
- * @createDate 2019/09/07 21:46
- * @see com.skyskin.community.model
+ * @createDate 2019/09/09 16:46
+ * @see com.skyskin.community.dto
  */
+
+//数据和数据进行传输WW
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;
     private String title;
     private String description;
@@ -20,5 +22,5 @@ public class Question {
     private Integer viewCount;
     private Integer likeCount;
     private Integer commentCount;
-
+    private User user;
 }

@@ -35,24 +35,42 @@ public class PublishController {
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
+            @RequestParam(value = "title",required = false) String title,
+            @RequestParam(value ="description",required = false) String description,
+            @RequestParam(value ="tag",required = false) String tag,
             HttpServletRequest request,
             Model model
     ) {
+        model.addAttribute("title", title);
+        model.addAttribute("description", description);
+        model.addAttribute("tag", tag);
+        if (title == null || "".equals(title)) {
+            model.addAttribute("error", "问题标题不能为空");
+            return "publish";
+        }
+        if (description == null || "".equals(description)) {
+            model.addAttribute("error", "问题补充不能为空");
+            return "publish";
+        }
+        if (tag == null || "".equals(tag)) {
+            model.addAttribute("error", "标签不能为空");
+            return "publish";
+        }
         User user = null;
         //得到cookie
         Cookie[] cookies = request.getCookies();
-        //遍历cookie得到名称为token的cookie
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                user = userMapper.findByToken(token);
-                if (user != null) {
-                    request.getSession().setAttribute("user", user);
+        if (cookies != null && cookies.length != 0) {
+
+            //遍历cookie得到名称为token的cookie
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    user = userMapper.findByToken(token);
+                    if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
         if (user == null) {
@@ -65,7 +83,7 @@ public class PublishController {
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtCreate(question.getGmtCreate());
+        question.setGmtModified(question.getGmtCreate());
         questionMapper.create(question);
         return "redirect:/";
     }

@@ -14,7 +14,10 @@
 [Java发送POST请求--OkHttp工具](https://square.github.io/okhttp/)  
 [springboot整合mybatis](http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)  
 [spring的数据源配置](https://docs.spring.io/spring-boot/docs/2.1.9.BUILD-SNAPSHOT/reference/html/boot-features-sql.html#boot-features-embedded-database-support)  
-[数据库sql自动运行的插件](https://flywaydb.org/getstarted/firststeps/commandline)
+[数据库sql自动运行的插件](https://flywaydb.org/getstarted/firststeps/commandline)   
+[Lombok,实力类get/set....等方法引入的插件](https://projectlombok.org/features/all)     
+[thymeleaf文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)   
+
 
 
 
@@ -25,7 +28,8 @@ chrome中打开匿名窗口 ctrl+shift+n
 
 ## 笔记
 网络直接数据传输用【dto】  
-数据库中传输用【model/pojo】
+数据库中传输用【model/pojo】  
+跟换ioc图标，在static目录下放入【favicon.ico】
 
 
 ## 脚本
@@ -40,4 +44,15 @@ create table USER
   GMT_CREATE   BIGINT,
   GMT_MODIFIED BIGINT
 );
+```
+## 笔记
+```sql 
+分页
+select * from QUESTION limit 15, 5; 
+0,5    1
+5,5    2
+10,5   3
+
+公式: ((n-1)*5),5
+```
 

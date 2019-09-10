@@ -1,13 +1,27 @@
-body{
+body {
     background-color: #efefef;
 }
-.main{
+
+.main {
     margin: 30px;
     background-color: white;
     border-radius: 3px;
 }
 
-.btn-publish{
+.btn-publish {
     float: right;
-    margin-bottom: 15px;
+}
+
+.media-object {
+    width: 43px;
+    height: 43px;
+}
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+
+.aw-item {
+margin-bottom: 10px;
 }

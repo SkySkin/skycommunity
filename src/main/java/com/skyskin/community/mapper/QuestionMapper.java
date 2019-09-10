@@ -3,6 +3,9 @@ package com.skyskin.community.mapper;
 import com.skyskin.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author Rock
@@ -17,4 +20,6 @@ public interface QuestionMapper {
     void create(Question question);
 
 
+    @Select("select * from QUESTION")
+    List<Question> getList();
 }
