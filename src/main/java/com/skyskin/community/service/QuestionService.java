@@ -1,5 +1,6 @@
 package com.skyskin.community.service;
 
+import com.skyskin.community.dto.PageInfoDTO;
 import com.skyskin.community.dto.QuestionDTO;
 import com.skyskin.community.mapper.QuestionMapper;
 import com.skyskin.community.mapper.UserMapper;
@@ -27,8 +28,14 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
-    public List<QuestionDTO> getQuestionList() {
-        List<Question> list = questionMapper.getList();
+    public PageInfoDTO getQuestionList(Integer page, Integer size) {
+        //公式: ((page-1)*5),5
+        Integer offset=(page-1)*size;
+        List<Question> list = questionMapper.getList(offset,size);
+        //得到条目总数
+        Integer totalCount = questionMapper.count();
+        //得到实例，以及设置page数据的值
+        PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount,page,size);
         ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : list) {
             User user = userMapper.findById(question.getCreator());
@@ -37,6 +44,8 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-        return questionDTOS;
+        pageInfoDTO.setQuestionDTOS(questionDTOS);
+
+        return pageInfoDTO;
     }
 }

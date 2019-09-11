@@ -3,6 +3,7 @@ package com.skyskin.community.mapper;
 import com.skyskin.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
  * @createDate 2019/09/07 21:39
  * @see com.skyskin.community.mapper
  */
-
 @Mapper
 public interface QuestionMapper {
 
@@ -20,6 +20,9 @@ public interface QuestionMapper {
     void create(Question question);
 
 
-    @Select("select * from QUESTION")
-    List<Question> getList();
+    @Select("select * from QUESTION limit #{offset},#{size}")
+    List<Question> getList(@Param(value = "offset") Integer offset, @Param(value = "size")Integer size);
+
+    @Select("select count(1) from QUESTION")
+    Integer count();
 }
