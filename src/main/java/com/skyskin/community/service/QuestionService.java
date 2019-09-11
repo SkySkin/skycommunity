@@ -29,13 +29,14 @@ public class QuestionService {
     private QuestionMapper questionMapper;
 
     public PageInfoDTO getQuestionList(Integer page, Integer size) {
-        //公式: ((page-1)*5),5
-        Integer offset=(page-1)*size;
-        List<Question> list = questionMapper.getList(offset,size);
         //得到条目总数
         Integer totalCount = questionMapper.count();
         //得到实例，以及设置page数据的值
         PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount,page,size);
+        //公式: ((page-1)*5),5
+        Integer offset=(pageInfoDTO.getPage()-1)*size;
+        List<Question> list = questionMapper.getList(offset,size);
+
         ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : list) {
             User user = userMapper.findById(question.getCreator());
@@ -47,5 +48,29 @@ public class QuestionService {
         pageInfoDTO.setQuestionDTOS(questionDTOS);
 
         return pageInfoDTO;
+    }
+
+    public PageInfoDTO getQuestionList(Integer id, Integer page, Integer size) {
+        //得到条目总数
+        Integer totalCount = questionMapper.countByCreator(id);
+        //得到实例，以及设置page数据的值
+        PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount,page,size);
+        //公式: ((page-1)*5),5
+        Integer offset=(pageInfoDTO.getPage()-1)*size;
+        List<Question> list = questionMapper.getListByCreator(id,offset,size);
+
+        ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();
+        for (Question question : list) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOS.add(questionDTO);
+        }
+        pageInfoDTO.setQuestionDTOS(questionDTOS);
+
+        return pageInfoDTO;
+
+
     }
 }

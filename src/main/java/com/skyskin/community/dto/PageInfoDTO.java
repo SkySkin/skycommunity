@@ -24,24 +24,33 @@ public class PageInfoDTO {
     private boolean showFirstPage;
     private boolean showEndPage;
     private Integer page;
+    private Integer totalPage;
     private List<Integer> pages=new ArrayList<>();
 
     public PageInfoDTO(Integer totalCount, Integer page, Integer size) {
         //定义总页数
-        Integer totalPage = 0;
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
             totalPage = totalCount / size + 1;
         }
+        //当page小于1时，让它为1
+        if (page<1){
+            page=1;
+        }
+        //当page大于最大页数时，让它为1最大页数
 
+        if (page>totalPage){
+            page=totalPage;
+        }
+        this.page=page;
         //计算pages
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             int begin = page - i;
             int end=page+i;
             if (begin>0) {
-                pages.add(begin,0);
+                pages.add(0,begin);
             }
             if(end<=totalPage){
                 pages.add(end);
