@@ -5,6 +5,7 @@ import com.skyskin.community.dto.GithubUser;
 import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.User;
 import com.skyskin.community.provider.GithubProvider;
+import com.skyskin.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ import java.util.UUID;
 @Controller
 /*授权控制器*/
 public class AuthorizeController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private GithubProvider githubProvider;

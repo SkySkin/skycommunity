@@ -31,8 +31,8 @@ chrome中打开匿名窗口 ctrl+shift+n
 ## 笔记
 网络直接数据传输用【dto】  
 数据库中传输用【model/pojo】  
-跟换ioc图标，在static目录下放入【favicon.ico】
-
+跟换ioc图标，在static目录下放入【favicon.ico】 
+static目录下面的内容会加载到项目编译后的根目录下
 
 ## 脚本
 ```sql    
@@ -57,4 +57,3 @@ select * from QUESTION limit 15, 5;
 
 公式: ((n-1)*5),5
 ```
-

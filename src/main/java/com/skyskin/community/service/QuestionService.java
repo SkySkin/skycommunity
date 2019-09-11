@@ -8,6 +8,7 @@ import com.skyskin.community.model.Question;
 import com.skyskin.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -72,5 +73,15 @@ public class QuestionService {
         return pageInfoDTO;
 
 
+    }
+
+
+    public QuestionDTO getById(Integer id) {
+      Question question=  questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }
