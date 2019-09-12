@@ -32,7 +32,8 @@ chrome中打开匿名窗口 ctrl+shift+n
 网络直接数据传输用【dto】  
 数据库中传输用【model/pojo】  
 跟换ioc图标，在static目录下放入【favicon.ico】 
-static目录下面的内容会加载到项目编译后的根目录下
+static目录下面的内容会加载到项目编译后的根目录下   
+[使用mvn flyway:migrate 生成目标H2数据库时:不能使用中文路径，会导致数据表找不到报错] 
 
 ## 脚本
 ```sql    
@@ -52,13 +53,21 @@ create table USER
  JDK，Maven  
  克隆代码到本地  
  运行命令创建数据库脚本  
- mvn flyway:migrate  
+ ```
+ mvn flyway:migrate 
+  ```
+
  运行打包命令  
- mvn package  
+ ```
+ mvn package 
+ ```
+ 
  运行项目  
- java -jar target/community-0.0.1-SNAPSHOT.jar  
- 访问项目
- http://localhost:8887
+ ```
+  java -jar target/community-0.0.1-SNAPSHOT.jar  
+```
+ 访问项目  
+ http://localhost:8889
 
 ```sql 
 分页
