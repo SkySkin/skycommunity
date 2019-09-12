@@ -17,7 +17,8 @@
 [数据库sql自动运行的插件](https://flywaydb.org/getstarted/firststeps/commandline)   
 [Lombok,实力类get/set....等方法引入的插件](https://projectlombok.org/features/all)     
 [thymeleaf文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)   
-[spring拦截器](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)     
+[spring拦截器](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)       
+[MyBatis Generator,数据库自动映射生产工具](http://www.mybatis.org/generator/)  
 
 
 
@@ -53,17 +54,20 @@ create table USER
  JDK，Maven  
  克隆代码到本地  
  运行命令创建数据库脚本  
+ ```bash
+ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
  ```
+ ```bash
  mvn flyway:migrate 
   ```
 
  运行打包命令  
- ```
+ ```bash
  mvn package 
  ```
  
  运行项目  
- ```
+ ```bash
   java -jar target/community-0.0.1-SNAPSHOT.jar  
 ```
  访问项目  

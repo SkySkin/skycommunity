@@ -1,5 +1,6 @@
 package com.skyskin.community;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -11,9 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @SpringBootApplication
-
+@MapperScan(basePackages = {"com.skyskin.community.mapper"})
 public class SkycommunityApplication {
-
 
     public static void main(String[] args) {
         SpringApplication.run(SkycommunityApplication.class, args);
