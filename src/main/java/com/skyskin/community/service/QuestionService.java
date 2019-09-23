@@ -5,6 +5,7 @@ import com.skyskin.community.dto.QuestionDTO;
 import com.skyskin.community.mapper.QuestionMapper;
 import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.Question;
+import com.skyskin.community.model.QuestionExample;
 import com.skyskin.community.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,8 @@ public class QuestionService {
 
     public PageInfoDTO getQuestionList(Integer page, Integer size) {
         //得到条目总数
-        Integer totalCount = questionMapper.count();
+        QuestionExample example = new QuestionExample();
+        Integer totalCount = (int)questionMapper.countByExample(example);
         //得到实例，以及设置page数据的值
         PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount,page,size);
         //公式: ((page-1)*5),5
