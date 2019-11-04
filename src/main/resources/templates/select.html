@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<!--xmlns:th="http://www.thymeleaf.org"-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>table模块快速使用</title>
+  <link rel="stylesheet" th:href="@{/layui/css/layui.css}"></link>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+
+<table id="demo" lay-filter="test"></table>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: '/selAll' //数据接口
+            //,page: true //开启分页
+            ,parseData:function (res) {
+                console.log(res)
+                return{
+                    "code":0,
+                    "msg":"",
+                    "count":100,
+                    data:res
+                }
+            }
+            ,cols: [
+                [//表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'name', title: '用户名', width:80}
+                ,{field: 'accountId', title: 'accountId', width:80, sort: true}
+                ,{field: 'token', title: 'token', width:80}
+                ,{field: 'gmtCreate', title: 'gmtCreate', width: 177}
+                ,{field: 'gmtModified', title: 'gmtModified', width: 80, sort: true}
+            ]
+            ]
+        });
+
+    });
+</script>
+</body>
+</html>
