@@ -2,6 +2,9 @@ package com.skyskin.community.service;
 
 import com.skyskin.community.dto.PageInfoDTO;
 import com.skyskin.community.dto.QuestionDTO;
+import com.skyskin.community.exception.CustomizeErrorCodeImpl;
+import com.skyskin.community.exception.CustomizeException;
+import com.skyskin.community.mapper.QuestionExtMapper;
 import com.skyskin.community.mapper.QuestionMapper;
 import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.Question;
@@ -29,6 +32,9 @@ public class QuestionService {
     private UserMapper userMapper;
 
     @Autowired
+    private QuestionExtMapper questionExtMapper;
+
+    @Autowired
     private QuestionMapper questionMapper;
 
     public PageInfoDTO getQuestionList(Integer page, Integer size) {
@@ -39,7 +45,9 @@ public class QuestionService {
         PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount, page, size);
         //公式: ((page-1)*5),5
         Integer offset = (pageInfoDTO.getPage() - 1) * size;
-        List<Question> list = questionMapper.selectByExampleWithBLOBsWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_modified DESC");
+        List<Question> list = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
         ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : list) {
             QuestionDTO questionDTO = new QuestionDTO();
@@ -104,6 +112,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question==null) {
+            throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -119,16 +130,38 @@ public class QuestionService {
             //如果没有id,则是进行 新增
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);
+            //使用 insertSelective 防止阅读数等值为空时 报错
+            questionMapper.insertSelective(question);
 
         } else {
             //如果有ID则进行  修改
             question.setGmtModified(System.currentTimeMillis());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria()
-                    .andCreatorEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(question, questionExample);
+                    .andIdEqualTo(question.getId());
+            int i = questionMapper.updateByExampleSelective(question, questionExample);
+            if (i!=1) {
+                throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+            }
         }
 
+    }
+
+    /**
+     * 用于更新阅读数
+     */
+    public void incView(Integer id) {
+        //存在阅读数bug的代码
+//        Question question = questionMapper.selectByPrimaryKey(id);
+//        Question updateQuestion = new Question();
+//        updateQuestion.setViewCount(question.getViewCount()+1);
+//        QuestionExample questionExample = new QuestionExample();
+//        questionExample.createCriteria()
+//                .andIdEqualTo(id);
+//        questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+        Question record = new Question();
+        record.setViewCount(1);
+        record.setId(id);
+        questionExtMapper.incView(record);
     }
 }

@@ -18,9 +18,8 @@
 [Lombok,实力类get/set....等方法引入的插件](https://projectlombok.org/features/all)     
 [thymeleaf文档](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)   
 [spring拦截器](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)       
-[MyBatis Generator,数据库自动映射生产工具](http://www.mybatis.org/generator/)  
-
-
+[MyBatis Generator,数据库自动映射生产工具](http://www.mybatis.org/generator/)    
+[Springboot 错误页面和异常的处理](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/html/boot-features-developing-web-applications.html)    
 
 
 
@@ -82,3 +81,11 @@ select * from QUESTION limit 15, 5;
 
 公式: ((n-1)*5),5
 ```
+
+## 问题解决思路
+
+- 阅读量增加时需要注意的点
+> 问题出现:进行阅读量增加时，考虑到可能出现
+在大访问量的情况下，由于短时间增加的数量较多，可能出现之前如
+一个人访问到13次，而此时可能在短时间内多量访问，可能以及到达20次，
+而这个时候可能出现我再去更新时，会在13的基础上加1，这个时候就变为14了，所以这个bug必须要解决。

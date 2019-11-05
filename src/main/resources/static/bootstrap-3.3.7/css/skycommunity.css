@@ -41,3 +41,7 @@ margin-bottom: 10px;
 .left-border{
     border-right:1px solid #eee;
 }
+
+.jumbotron{
+    margin: 50px;
+}

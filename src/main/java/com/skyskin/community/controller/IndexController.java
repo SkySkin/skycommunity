@@ -31,7 +31,6 @@ public class IndexController {
                         @RequestParam(name = "limit",defaultValue = "5")Integer size) {
         User user=null;
         //得到cookie
-
         PageInfoDTO pageInfoDTO=questionService.getQuestionList(page,size);
         model.addAttribute("pageInfoDTO",pageInfoDTO);
         return "index";
