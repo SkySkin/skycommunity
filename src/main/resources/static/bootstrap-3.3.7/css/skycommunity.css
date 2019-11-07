@@ -45,3 +45,8 @@ margin-bottom: 10px;
 .jumbotron{
     margin: 50px;
 }
+
+/*设置文章信息数的颜色*/
+.text-desc span{
+    color: #204d74;
+}

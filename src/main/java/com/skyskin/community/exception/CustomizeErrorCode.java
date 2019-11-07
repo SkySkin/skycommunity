@@ -9,4 +9,5 @@ package com.skyskin.community.exception;
  */
 public interface  CustomizeErrorCode {
     String getMessage();
+    Integer getCode();
 }
