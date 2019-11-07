@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/skycommunity.css"/>
     <script src="/bootstrap-3.3.7/js/jquery-3.3.1.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/community.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body>
@@ -16,23 +17,52 @@
 <div class="container-fluid main profile">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 ">
-            <h3><span th:text="${questionDTO.title}"></span></h3>
-            <span class="text-desc">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                <h3><span th:text="${questionDTO.title}"></span></h3>
+                <span class="text-desc">
                 作者 <span th:text="${questionDTO.user.name}"></span>  |
-                <span th:text="${questionDTO.commentCount}"></span>个回复 |
+                <span th:text="${questionDTO.commentCount}"></span>个评论 |
                 <span th:text="${questionDTO.viewCount}"></span>次浏览 |
                 <span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
             </span>
-            <hr>
-            <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${questionDTO.description}">
-            </div>
-            <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <a th:href="@{'/publish/'+${questionDTO.id}}" class="skymenu"
-               th:if="${session.user!=null && session.user.id==questionDTO.user.id}">
+                <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${questionDTO.description}">
+                </div>
+                <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <a th:href="@{'/publish/'+${questionDTO.id}}" class="skymenu "
+                       th:if="${session.user!=null && session.user.id==questionDTO.user.id}">
                 <span class="glyphicon glyphicon-pencil " aria-hidden="true">
                 </span>
-                编辑
-            </a>
+                        编辑
+                    </a>
+                </div>
+                <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h2>
+                    <span th:text="${questionDTO.commentCount}"></span>个评论
+                </h2>
+                <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
+                <div class="media">
+                    <div class="media-left">
+                        <span href="#">
+                            <img class="media-object img-thumbnail"
+                                 th:src="${questionDTO.user.getAvatarUrl()}">
+                        </span>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading" th:text="${questionDTO.user.name}"></h5>
+                    </div>
+                </div>
+                <input type="hidden" id="question_id" th:value="${questionDTO.id}">
+                <textarea class="form-control comment" id="comment_content" rows="6"
+                          placeholder="请输入评论信息..."></textarea>
+                <button type="button" class="btn btn-success comment-btn" onclick="post()"> 回复</button>
+            </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 ">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section">
@@ -40,7 +70,8 @@
                 <div class="media">
                     <div class="media-left">
                         <span href="#">
-                            <img class="media-object img-circle" src="" th:src="${questionDTO.user.getAvatarUrl()}">
+                            <img class="media-object img-rounded"
+                                 th:src="${questionDTO.user.getAvatarUrl()}">
                         </span>
                     </div>
                     <div class="media-body">

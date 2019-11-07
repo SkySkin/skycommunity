@@ -12,7 +12,7 @@ import lombok.Data;
 //数据和数据进行传输WW
 @Data
 public class QuestionDTO {
-    private Integer id;
+    private Long id;
     private String title;
     private String description;
     private String tag;

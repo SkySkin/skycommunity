@@ -14,6 +14,20 @@ public enum  CommentEnum {
     private Integer type;
     private String Message;
 
+    /**
+     * 判断评论类型是否存在
+     * @param type
+     * @return
+     */
+    public static boolean isExist(Integer type) {
+        for (CommentEnum commentEnum : CommentEnum.values()) {
+            if (type==commentEnum.getType()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Integer getType() {
         return type;
     }

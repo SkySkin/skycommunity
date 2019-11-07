@@ -20,6 +20,7 @@
 [spring拦截器](https://docs.spring.io/spring/docs/5.0.3.RELEASE/spring-framework-reference/web.html#spring-web)       
 [MyBatis Generator,数据库自动映射生产工具](http://www.mybatis.org/generator/)    
 [Springboot 错误页面和异常的处理](https://docs.spring.io/spring-boot/docs/2.0.0.RELEASE/reference/html/boot-features-developing-web-applications.html)    
+[localstorage Web存储]
 
 
 

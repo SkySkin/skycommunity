@@ -50,3 +50,17 @@ margin-bottom: 10px;
 .text-desc span{
     color: #204d74;
 }
+
+
+.comment{
+    margin: 10px 0 10px 0;
+}
+
+.media-heading{
+    padding-top: 5px;
+}
+
+.comment-btn{
+    float: right;
+    margin-bottom: 10px;
+}

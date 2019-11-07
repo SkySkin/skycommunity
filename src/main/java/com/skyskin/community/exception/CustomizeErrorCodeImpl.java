@@ -7,10 +7,13 @@ package com.skyskin.community.exception;
  * @see com.skyskin.community.exception
  */
 public enum  CustomizeErrorCodeImpl implements CustomizeErrorCode {
-    QUESTION_NOT_FOUND(1001, "你已经进入了找不到结果的二次元空间 (●´∀｀●),要不换一个๑乛◡乛๑"),
+    RUSULT_NOT_FOUND(1001, "你已经进入了找不到结果的二次元空间 (●´∀｀●),要不换一个๑乛◡乛๑"),
     TARGET_NOT_FOUND(1002, "你还没选择任何问题或评论进行回复呢 (●´∀｀●),要不选一个๑乛◡乛๑"),
     NTO_LOGIN_ERROR(1003,"未登录不能进行评论哦，请先登陆๑乛◡乛๑"),
-    IS5XX_ERROR(2001, "你个小坏蛋,把我服务器搞炸了  (/= _ =)/~┴┴");
+    IS5XX_ERROR(2001, "你个小坏蛋,把我服务器搞炸了  (/= _ =)/~┴┴"),
+    TYPE_NOT_FOUND(2002, "评论类型错误或不存在  (/= _ =)/~┴┴"),
+    COMMENT_NOT_FOUND(2003, "该评论找不到了,不然换个试试  (●´∀｀●)"),
+    QUESTION_NOT_FOUND(2004, "该问题找不到了,不然换个试试  (●´∀｀●)"),
     ;
 
     private String message;

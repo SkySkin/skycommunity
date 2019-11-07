@@ -27,7 +27,7 @@ public class UserService {
             //如果查询到的dbUser为空，则插入用户
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            userMapper.insert(user);
+            userMapper.insertSelective(user);
         }else {
             //如果能查询到dbUser,则修改时间和部分信息
             user.setGmtModified(System.currentTimeMillis());

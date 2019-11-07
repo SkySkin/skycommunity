@@ -10,6 +10,17 @@
     <script src="/bootstrap-3.3.7/js/jquery-3.3.1.min.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+<script type="application/javascript">
+    // 当文档加载完成 进行判断是否需要关闭这个网址（评论时没有进行登陆，登陆后进行自动关闭当前页面的操作）
+    window.onload=function () {
+        // debugger;
+        var closeable = window.localStorage.getItem("closeable");
+        if (closeable == "true") {
+            window.close();
+            window.localStorage.removeItem("closeable");
+        }
+    }
+</script>
 <body>
 
 <div th:insert="~{navigation :: nav}"></div>
@@ -30,7 +41,7 @@
                             <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
                         </h4>
                         <span th:text="${question.description}"></span><br>
-                        <span class="text-desc">• <span th:text="${question.user.getName()}"></span> 发起了问题 • <span th:text="${question.commentCount}"></span>个回复 • <span
+                        <span class="text-desc">• <span th:text="${question.user.getName()}"></span> 发起了问题 • <span th:text="${question.commentCount}"></span>个评论 • <span
                                 th:text="${question.viewCount}"></span>次浏览 •
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
                     </div>

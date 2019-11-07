@@ -11,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * 该类的作用为捕获不能处理的异常
@@ -38,7 +36,7 @@ public class CustomizeErrorController implements ErrorController {
         HttpStatus status = getStatus(request);
         if (status.is4xxClientError()) {
             //是4xx则是客户端错误
-            model.addAttribute("message", CustomizeErrorCodeImpl.QUESTION_NOT_FOUND.getMessage());
+            model.addAttribute("message", CustomizeErrorCodeImpl.RUSULT_NOT_FOUND.getMessage());
         }
         if (status.is5xxServerError()) {
             //是5xx则是服务端错误

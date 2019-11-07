@@ -13,7 +13,6 @@ import com.skyskin.community.model.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,13 +70,13 @@ public class QuestionService {
             user.setBio("");
             user.setName("用户不存在");
             user.setToken("");
-            user.setId(0);
+            user.setId(0L);
             user.setAccountId("");
         }
         return user;
     }
 
-    public PageInfoDTO getQuestionList(Integer userId, Integer page, Integer size) {
+    public PageInfoDTO getQuestionList(Long userId, Integer page, Integer size) {
         //得到条目总数
 //        Integer totalCount = questionMapper.countByCreator(userId);
         QuestionExample questionExample = new QuestionExample();
@@ -110,10 +109,10 @@ public class QuestionService {
     }
 
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question==null) {
-            throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+            throw new CustomizeException(CustomizeErrorCodeImpl.RUSULT_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
@@ -130,7 +129,9 @@ public class QuestionService {
             //如果没有id,则是进行 新增
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            //使用 insertSelective 防止阅读数等值为空时 报错
+            question.setCommentCount(0);
+            question.setViewCount(0);
+            //使用 insertSelective 防止阅读数、评论数 等值为空时 报错
             questionMapper.insertSelective(question);
 
         } else {
@@ -141,7 +142,7 @@ public class QuestionService {
                     .andIdEqualTo(question.getId());
             int i = questionMapper.updateByExampleSelective(question, questionExample);
             if (i!=1) {
-                throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+                throw new CustomizeException(CustomizeErrorCodeImpl.RUSULT_NOT_FOUND);
             }
         }
 
@@ -150,7 +151,7 @@ public class QuestionService {
     /**
      * 用于更新阅读数
      */
-    public void incView(Integer id) {
+    public void incView(Long id) {
         //存在阅读数bug的代码
 //        Question question = questionMapper.selectByPrimaryKey(id);
 //        Question updateQuestion = new Question();

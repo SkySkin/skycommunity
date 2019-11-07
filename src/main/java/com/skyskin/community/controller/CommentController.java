@@ -41,6 +41,7 @@ public class CommentController {
         //判断当前用户是否登陆
         User user = (User) request.getSession().getAttribute("user");
         if (user==null) {
+
             return ResultDTO.errorOf(CustomizeErrorCodeImpl.NTO_LOGIN_ERROR);
 
         }
@@ -50,7 +51,7 @@ public class CommentController {
         comment.setType(commentDTO.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(System.currentTimeMillis());
-        comment.setCommentator(1);
+        comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
         commentService.insert(comment);
         return ResultDTO.okOf();

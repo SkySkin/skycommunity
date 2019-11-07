@@ -1,5 +1,6 @@
 package com.skyskin.community.advice;
 
+import com.alibaba.fastjson.JSON;
 import com.skyskin.community.dto.ResultDTO;
 import com.skyskin.community.exception.CustomizeErrorCode;
 import com.skyskin.community.exception.CustomizeErrorCodeImpl;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author Rock
@@ -24,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    Object handler(HttpServletRequest request, Throwable e, Model model) {
+    Object handler(HttpServletRequest request, Throwable e, Model model, HttpServletResponse response) {
         e.printStackTrace();
 //        HttpStatus status = getStatus(request);
         //===修改码mark=1000 对于返回的信息格式进行逻辑处理【text/html,application/json  】===
@@ -33,16 +37,28 @@ public class CustomizeExceptionHandler {
 
         //对格式进行判断
 
+        ResultDTO resultDTO;
         if ("application/json".equalsIgnoreCase(contentType)) {
             //返回json
             if (e instanceof CustomizeException) {
                 //得到的是可识别的错误时，讲该错误的信息的进行传递
-                return ResultDTO.errorOf((CustomizeErrorCode) e);
+                resultDTO = ResultDTO.errorOf((CustomizeException) e);
             } else {
                 //当服务不能识别的错误出现时，所传的信息
-                return ResultDTO.errorOf(CustomizeErrorCodeImpl.IS5XX_ERROR);
+                resultDTO = ResultDTO.errorOf(CustomizeErrorCodeImpl.IS5XX_ERROR);
 //                model.addAttribute("message", CustomizeErrorCodeImpl.IS5XX_ERROR.getMessage());
             }
+            try {
+                response.setContentType(contentType);
+                response.setStatus(200);
+                response.setCharacterEncoding("utf-8");
+                PrintWriter writer = response.getWriter();
+                writer.write(JSON.toJSONString(resultDTO));
+                writer.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
             //mark=1000 end
         } else {
 
