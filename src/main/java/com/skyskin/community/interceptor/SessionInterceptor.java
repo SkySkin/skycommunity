@@ -33,6 +33,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
                     if (token!=null) {
+//                        System.out.println("token:"+token);
+
                         UserExample userExample = new UserExample();
                         userExample.createCriteria()
                                 .andTokenEqualTo(token);
@@ -41,6 +43,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                             User user = users.get(0);
                             if (user != null) {
                                 request.getSession().setAttribute("user", user);
+//                                System.out.println("set Session");
                             }
                         }
                         break;

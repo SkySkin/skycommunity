@@ -1,5 +1,8 @@
 package com.skyskin.community.model;
 
+import lombok.ToString;
+
+@ToString
 public class Question {
     /**
      *

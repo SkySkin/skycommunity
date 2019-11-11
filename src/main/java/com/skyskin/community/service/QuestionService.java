@@ -45,6 +45,7 @@ public class QuestionService {
         //公式: ((page-1)*5),5
         Integer offset = (pageInfoDTO.getPage() - 1) * size;
         QuestionExample questionExample = new QuestionExample();
+        //设置排序的条件
         questionExample.setOrderByClause("gmt_modified DESC");
         List<Question> list = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
         ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();

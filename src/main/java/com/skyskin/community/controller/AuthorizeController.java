@@ -66,7 +66,9 @@ public class AuthorizeController {
             user.setBio(getGithubUser.getBio());
             user.setAvatarUrl(getGithubUser.getAvatarUrl());
             userService.createOrUpdate(user);
-            response.addCookie(new Cookie("token", token));
+            Cookie loginCookie = new Cookie("token", token);
+            loginCookie.setMaxAge(14*24*60*60);
+            response.addCookie(loginCookie);
             return "redirect:/";
         } else {
             //登陆失败，重新登陆

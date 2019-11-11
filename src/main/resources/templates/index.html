@@ -40,8 +40,8 @@
                         <h4 class="media-heading" >
                             <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
                         </h4>
-                        <span th:text="${question.description}"></span><br>
-                        <span class="text-desc">• <span th:text="${question.user.getName()}"></span> 发起了问题 • <span th:text="${question.commentCount}"></span>个评论 • <span
+                        <!--<span th:text="${question.description}"></span><br>-->
+                        <span style="display: inline-block;margin-top: 5px" class="text-desc">• <span th:text="${question.user.getName()}"></span> 发起了问题 • <span th:text="${question.commentCount}"></span>个评论 • <span
                                 th:text="${question.viewCount}"></span>次浏览 •
                         <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
                     </div>
