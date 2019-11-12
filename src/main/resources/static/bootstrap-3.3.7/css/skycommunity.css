@@ -95,6 +95,9 @@ margin-bottom: 10px;
     box-sizing: border-box;
     float: left;
 }
+.two-content-media{
+    margin-bottom: 5px;
+}
 
 
 .comment_list a{
@@ -106,18 +109,20 @@ margin-bottom: 10px;
 
 
 }
+.question_sub{
+    text-decoration: none;
+    cursor: pointer;
+}
 
 .operate a{
     background-color: #f5f5f5;
 
 }
 
-.operate a:hover{
-
+.agree:hover,.disagree:hover,.twocontent:hover{
     background-color: #499ef3;
     color: #fff;
 }
-
 
 
 hr{
@@ -131,4 +136,23 @@ hr{
     line-height: 1.6;
     word-wrap: break-word !important;
 }
+
+.operate .fadeIn{
+    color:#fff;
+    background-color:#499ef3;
+}
+
+.two-content-list{
+    margin-top: 20px;
+    border: 1px solid #eee;
+    padding-top: 20px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+
+}
+
+.two-content-sub{
+    margin-bottom: 10px;
+}
+
 

@@ -1,8 +1,10 @@
 package com.skyskin.community.controller;
 
 import com.skyskin.community.dto.CommentCreateDTO;
+import com.skyskin.community.dto.CommentDTO;
 import com.skyskin.community.dto.ResultDTO;
 import com.skyskin.community.dto.UserDTO;
+import com.skyskin.community.enums.CommentEnum;
 import com.skyskin.community.exception.CustomizeErrorCodeImpl;
 import com.skyskin.community.mapper.CommentMapper;
 import com.skyskin.community.model.Comment;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author Rock
@@ -61,7 +64,7 @@ public class CommentController {
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
         commentService.insert(comment);
-        return ResultDTO.okOf();
+        return ResultDTO.okOf(null);
     }
 
 
@@ -84,6 +87,13 @@ public class CommentController {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user,userDTO);
         return userDTO;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id")Long id){
+        List<CommentDTO> commentDTOList = commentService.listByTargetId(id, CommentEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOList);
     }
 
 }

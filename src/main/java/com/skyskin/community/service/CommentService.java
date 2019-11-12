@@ -1,6 +1,5 @@
 package com.skyskin.community.service;
 
-import com.skyskin.community.dto.CommentCreateDTO;
 import com.skyskin.community.dto.CommentDTO;
 import com.skyskin.community.enums.CommentEnum;
 import com.skyskin.community.exception.CustomizeErrorCodeImpl;
@@ -87,13 +86,13 @@ public class CommentService {
     }
 
 
-    public List<CommentDTO> listByQuestionId(Long id) {
+    public List<CommentDTO> listByTargetId(Long id, CommentEnum type) {
         CommentExample example = new CommentExample();
         //设置匹配当前父类ID并且要是类型为 CommentEnum.QUESTION
         example.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentEnum.QUESTION.getType());
-//        example.setOrderByClause("GMT_MODIFIED DESC");
+                .andTypeEqualTo(type.getType());
+        example.setOrderByClause("GMT_CREATE ASC");
         //得到评论的信息
         List<Comment> comments = commentMapper.selectByExample(example);
 

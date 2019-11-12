@@ -6,6 +6,7 @@ import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.User;
 import com.skyskin.community.provider.GithubProvider;
 import com.skyskin.community.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -46,8 +47,12 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
+                           @RequestParam(name="uri",required=false) String uri,
                            HttpServletRequest request,
                            HttpServletResponse response) {
+//        System.out.println("uri:"+uri);
+//        System.out.println("state:"+state);
+//        System.out.println("code:"+code);
         Access_tokenDTO access_tokenDTO = new Access_tokenDTO();
         access_tokenDTO.setCode(code);
         access_tokenDTO.setRedirect_uri(redirect_uri);
@@ -69,6 +74,11 @@ public class AuthorizeController {
             Cookie loginCookie = new Cookie("token", token);
             loginCookie.setMaxAge(14*24*60*60);
             response.addCookie(loginCookie);
+            //判断是否有请求跳转的参数
+            if (uri!=null && !StringUtils.isBlank(uri)) {
+                return "redirect:"+uri+"";
+
+            }
             return "redirect:/";
         } else {
             //登陆失败，重新登陆

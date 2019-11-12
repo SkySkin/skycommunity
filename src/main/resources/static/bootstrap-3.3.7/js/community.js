@@ -1,21 +1,32 @@
 //提交回复
-function post() {
-    var questionId = $("#question_id").val();
-    var content = $("#comment_content").val();
+function post(postId, type) {
+    var comment_section="";
+    comment_section="comment_section-"+postId;
+    if(postId==0){
+        //当不存在id时，自动获取问题的id
+        postId = $("#question_id").val();
+        comment_section="comment_section";
+    }
+    var content = null;
+    if (type == 1) {
+        content = $("#comment_content").val();
+    } else {
+        content = $("#comment_content-"+postId+"").val();
+    }
     $.ajax({
         type: "POST",
         url: "/comment",
         data: JSON.stringify({
-            "parentId": questionId,
+            "parentId": postId,
             "content": content,
-            "type": 1
+            "type": type
         }),
         success: function (response) {
 
-            //如何返回200则正常，吧评论框隐藏
+            //如果返回200则正常，吧评论框隐藏
             if (response.code == 200) {
-                $("#comment_section").hide();
-                createNewComment(content);
+                $("#"+comment_section+"").hide();
+                createNewComment(postId,type, content);
 
             } else {
                 //如果1003 ,则需要进行登陆
@@ -24,7 +35,10 @@ function post() {
                     var b = confirm(response.message);
                     //如果选择true
                     if (b) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&redirect_uri=http://localhost:8889/callback&scope=user&state=1");
+                        var pathname = window.location.pathname;
+                        var search = window.location.search;
+                        var subpath = "";
+                        window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://localhost:8889/callback?uri=" + subpath + "");
                         window.localStorage.setItem("closeable", true);
                     }
                 } else {
@@ -32,21 +46,30 @@ function post() {
 
                 }
             }
-            console.log(response);
+            // console.log(response);
         },
         dataType: "json",
         contentType: "application/json"
     });
-    console.log(questionId);
-    console.log(content);
+    // console.log(questionId);
+    // console.log(content);
 }
 
 
-function createNewComment(content){
-    //把值设置进去
-    $("#write_comment").text(content);
-    //取消隐藏
-    $("#comment_hide").removeClass("hide");
+function createNewComment(postId,type, content) {
+    //如果为1的话我们对以及评论进行设置值
+    if (type == 1) {
+        //把值设置进去
+        $("#write_comment").text(content);
+        //取消隐藏
+        $("#comment_hide").removeClass("hide");
+    } else {
+        //如果是二，则进行二级评论的数据增加
+        //把值设置进去
+        $("#write_comment-" + postId + "").text(content);
+        //取消隐藏
+        $("#comment_hide-"+postId+"").removeClass("hide");
+    }
 
 
 }
@@ -58,27 +81,84 @@ function collapseComments(e) {
     //当点击时进行data-id的获取
     var mark = e.getAttribute("mark");
     var id = e.getAttribute("data-id");
-    console.log(id);
-    console.log(mark);
+    // console.log(id);
+    // console.log(mark);
     //通过ID得到comment
-    var comment = $("#comment-"+id);
+    var comment = $("#comment-" + id);
     //判断是否打开二级评论
     if ("close" == mark) {
+        $.getJSON("/comment/"+id,function (data) {
+           var commenttwolist = $("#comment-"+id);
+           var items=[];
+           $.each(data.data,function (key,val) {
+               // console.log(val)
+               // console.log(val.user.avatarUrl)
+               // console.log(val.user.name)
+               // console.log(timestampToTime(val.gmtCreate))
+               // console.log(val.content)
+               items.push('<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                   '    <div class="media two-content-media">\n' +
+                   '    <div class="media-left">\n' +
+                   '    <span href="#">\n' +
+                   '    <img class="media-object img-thumbnail" src="'+val.user.avatarUrl+'">\n' +
+                   '    </span>\n' +
+                   '    </div>\n' +
+                   '    <div class="media-body">\n' +
+                   '    <small class="media-heading">\n' +
+                   '    <span style="font-size: 13px;">'+val.user.name+'</span>\n' +
+                   '    <!--时间-->\n' +
+                   '    <span class="pull-right" style="color: #999">'+timestampToTime(val.gmtCreate)+'</span>\n' +
+                   '    </small>\n' +
+                   '    <br>\n' +
+                   '    <!--评论内容-->\n' +
+                   '    <div style="font-size: 13px;color: #303030;" class="comment_contex">'+val.content+'\n' +
+                   '    </div>\n' +
+                   '    </div>\n' +
+                   '    </div>\n' +
+                   '    <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                   '    </div>');
+               commenttwolist.prepend(items.join(""))
+               
+           })
+        });
         // comment.addClass("in");
-        e.setAttribute("mark","open");
+        e.setAttribute("mark", "open");
         comment.fadeIn("slow");
-        $(e).css("color","#fff")
-        $(e).css("background-color","#499ef3")
-    }else {
-    // comment.removeClass("in");
+        $(e).removeClass("twocontent")
+        $(e).addClass("fadeIn");
+    } else {
+        // comment.removeClass("in");
         comment.fadeOut("slow");
-        e.setAttribute("mark","close");
-        $(e).css("color","#999")
-        $(e).css("background-color","#f5f5f5")
+        e.setAttribute("mark", "close");
+        $(e).addClass("twocontent")
+        $(e).removeClass("fadeIn");
     }
 
 }
 
+
+
+//进行登陆
+function logsub() {
+    var pathname = window.location.pathname;
+    var search = window.location.search;
+    var subpath = pathname + search;
+    window.close();
+    window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://localhost:8889/callback?uri=" + subpath + "");
+    // window.localStorage.setItem("closeable", true);
+
+}
+
+ function timestampToTime(timestamp) {
+            var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+           var Y = date.getFullYear() + '-';
+            var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            var D = date.getDate() + ' ';
+            var h = date.getHours() + ':';
+            var m = date.getMinutes() ;
+            // var s = date.getSeconds();
+            return Y+M+D+h+m;
+         }
 
 // function createNewComment(content) {
 //     var commentItem = $("#comment_item");

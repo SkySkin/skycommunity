@@ -1,8 +1,8 @@
 package com.skyskin.community.controller;
 
-import com.skyskin.community.dto.CommentCreateDTO;
 import com.skyskin.community.dto.CommentDTO;
 import com.skyskin.community.dto.QuestionDTO;
+import com.skyskin.community.enums.CommentEnum;
 import com.skyskin.community.service.CommentService;
 import com.skyskin.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,7 +34,7 @@ public class QuestionController {
         QuestionDTO questionDTO = questionService.getById(id);
 
         //查询改问题下面的评论
-        List<CommentDTO> commentDTOList =commentService.listByQuestionId(id);
+        List<CommentDTO> commentDTOList =commentService.listByTargetId(id, CommentEnum.QUESTION);
         //进行阅读量的增加
         questionService.incView(id);
         model.addAttribute("questionDTO", questionDTO);

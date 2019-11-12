@@ -14,11 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
  * 该类用来定义返回的json响应数据格式
  */
 @Data
-public class ResultDTO {
+public class ResultDTO<T> {
     //返回给前端的状态码
     private Integer code;
     //提升信息
     private String message;
+
+    //返回的数据
+    private T data;
 
     public static ResultDTO errorOf(Integer code,String message){
         ResultDTO resultDTO = new ResultDTO();
@@ -40,12 +43,12 @@ public class ResultDTO {
     /**
      * 评论成功返回的操作
      */
-    public  static ResultDTO okOf(){
+    public  static <T> ResultDTO okOf(T t){
         ResultDTO resultDTO = new ResultDTO();
         CommentEnum success = CommentEnum.SUCCESS;
         resultDTO.setCode(success.getType());
         resultDTO.setMessage(success.getMessage());
-
+        resultDTO.setData(t);
         return  resultDTO;
     }
 
