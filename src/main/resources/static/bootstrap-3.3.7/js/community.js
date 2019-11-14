@@ -1,17 +1,17 @@
 //提交回复
 function post(postId, type) {
-    var comment_section="";
-    comment_section="comment_section-"+postId;
-    if(postId==0){
+    var comment_section = "";
+    comment_section = "comment_section-" + postId;
+    if (postId == 0) {
         //当不存在id时，自动获取问题的id
         postId = $("#question_id").val();
-        comment_section="comment_section";
+        comment_section = "comment_section";
     }
     var content = null;
     if (type == 1) {
         content = $("#comment_content").val();
     } else {
-        content = $("#comment_content-"+postId+"").val();
+        content = $("#comment_content-" + postId + "").val();
     }
     $.ajax({
         type: "POST",
@@ -25,8 +25,8 @@ function post(postId, type) {
 
             //如果返回200则正常，吧评论框隐藏
             if (response.code == 200) {
-                $("#"+comment_section+"").hide();
-                createNewComment(postId,type, content);
+                $("#" + comment_section + "").hide();
+                createNewComment(postId, type, content);
 
             } else {
                 //如果1003 ,则需要进行登陆
@@ -56,7 +56,7 @@ function post(postId, type) {
 }
 
 
-function createNewComment(postId,type, content) {
+function createNewComment(postId, type, content) {
     //如果为1的话我们对以及评论进行设置值
     if (type == 1) {
         //把值设置进去
@@ -68,7 +68,7 @@ function createNewComment(postId,type, content) {
         //把值设置进去
         $("#write_comment-" + postId + "").text(content);
         //取消隐藏
-        $("#comment_hide-"+postId+"").removeClass("hide");
+        $("#comment_hide-" + postId + "").removeClass("hide");
     }
 
 
@@ -81,53 +81,59 @@ function collapseComments(e) {
     //当点击时进行data-id的获取
     var mark = e.getAttribute("mark");
     var id = e.getAttribute("data-id");
-    // console.log(id);
-    // console.log(mark);
     //通过ID得到comment
     var comment = $("#comment-" + id);
     //判断是否打开二级评论
     if ("close" == mark) {
-        $.getJSON("/comment/"+id,function (data) {
-           var commenttwolist = $("#comment-"+id);
-           var items=[];
-           $.each(data.data,function (key,val) {
-               // console.log(val)
-               // console.log(val.user.avatarUrl)
-               // console.log(val.user.name)
-               // console.log(timestampToTime(val.gmtCreate))
-               // console.log(val.content)
-               items.push('<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-                   '    <div class="media two-content-media">\n' +
-                   '    <div class="media-left">\n' +
-                   '    <span href="#">\n' +
-                   '    <img class="media-object img-thumbnail" src="'+val.user.avatarUrl+'">\n' +
-                   '    </span>\n' +
-                   '    </div>\n' +
-                   '    <div class="media-body">\n' +
-                   '    <small class="media-heading">\n' +
-                   '    <span style="font-size: 13px;">'+val.user.name+'</span>\n' +
-                   '    <!--时间-->\n' +
-                   '    <span class="pull-right" style="color: #999">'+timestampToTime(val.gmtCreate)+'</span>\n' +
-                   '    </small>\n' +
-                   '    <br>\n' +
-                   '    <!--评论内容-->\n' +
-                   '    <div style="font-size: 13px;color: #303030;" class="comment_contex">'+val.content+'\n' +
-                   '    </div>\n' +
-                   '    </div>\n' +
-                   '    </div>\n' +
-                   '    <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
-                   '    </div>');
-               commenttwolist.prepend(items.join(""))
-               
-           })
-        });
-        // comment.addClass("in");
+        //判断子元素数量是否大于2，如果大于2则不需要再去请求数据
+        if (comment.children().length > 2) {
+            e.setAttribute("mark", "open");
+            comment.fadeIn("slow");
+            $(e).removeClass("twocontent")
+            $(e).addClass("fadeIn");
+        } else {
+            $.getJSON("/comment/" + id, function (data) {
+                var commenttwolist = $("#comment-" + id);
+                // var length =0;
+                // console("length1"+length1)
+                var items = [];
+                // commenttwolist
+                $.each(data.data, function (key, val) {
+                    // console.log(val)
+                    // console.log(val.user.avatarUrl)
+                    // console.log(val.user.name)
+                    // console.log(timestampToTime(val.gmtCreate))
+                    // console.log(val.content)
+                    items.push('<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 commentitem">\n' +
+                        '    <div class="media two-content-media">\n' +
+                        '    <div class="media-left">\n' +
+                        '    <span href="#">\n' +
+                        '    <img class="media-object img-thumbnail" src="' + val.user.avatarUrl + '">\n' +
+                        '    </span>\n' +
+                        '    </div>\n' +
+                        '    <div class="media-body">\n' +
+                        '    <small class="media-heading">\n' +
+                        '    <span style="font-size: 13px;">' + val.user.name + '</span>\n' +
+                        '    <!--时间-->\n' +
+                        '    <span class="pull-right" style="color: #999">' + timestampToTime(val.gmtCreate) + '</span>\n' +
+                        '    </small>\n' +
+                        '    <br>\n' +
+                        '    <!--评论内容-->\n' +
+                        '    <div style="font-size: 13px;color: #303030;" class="comment_contex">' + val.content + '\n' +
+                        '    </div>\n' +
+                        '    </div>\n' +
+                        '    </div>\n' +
+                        '    <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                        '    </div>');
+                });
+                commenttwolist.prepend(items.join(""))
+            });
+        }
         e.setAttribute("mark", "open");
         comment.fadeIn("slow");
         $(e).removeClass("twocontent")
         $(e).addClass("fadeIn");
     } else {
-        // comment.removeClass("in");
         comment.fadeOut("slow");
         e.setAttribute("mark", "close");
         $(e).addClass("twocontent")
@@ -135,7 +141,6 @@ function collapseComments(e) {
     }
 
 }
-
 
 
 //进行登陆
@@ -149,16 +154,16 @@ function logsub() {
 
 }
 
- function timestampToTime(timestamp) {
-            var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-           var Y = date.getFullYear() + '-';
-            var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-            var D = date.getDate() + ' ';
-            var h = date.getHours() + ':';
-            var m = date.getMinutes() ;
-            // var s = date.getSeconds();
-            return Y+M+D+h+m;
-         }
+function timestampToTime(timestamp) {
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    var D = date.getDate() + ' ';
+    var h = date.getHours() + ':';
+    var m = date.getMinutes();
+    // var s = date.getSeconds();
+    return Y + M + D + h + m;
+}
 
 // function createNewComment(content) {
 //     var commentItem = $("#comment_item");

@@ -10,13 +10,17 @@ import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.Question;
 import com.skyskin.community.model.QuestionExample;
 import com.skyskin.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * @author Rock
@@ -53,7 +57,7 @@ public class QuestionService {
             QuestionDTO questionDTO = new QuestionDTO();
             User user = userMapper.selectByPrimaryKey(question.getCreator());
             if (user == null) {
-                user=EmptyUserGetVal(user);
+                user = EmptyUserGetVal(user);
             }
             questionDTO.setUser(user);
             BeanUtils.copyProperties(question, questionDTO);
@@ -94,8 +98,8 @@ public class QuestionService {
         ArrayList<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : list) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
-            if(user==null){
-                user=EmptyUserGetVal(user);
+            if (user == null) {
+                user = EmptyUserGetVal(user);
             }
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
@@ -112,14 +116,14 @@ public class QuestionService {
 
     public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
-        if (question==null) {
+        if (question == null) {
             throw new CustomizeException(CustomizeErrorCodeImpl.RUSULT_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
-        if(user==null){
-            user=EmptyUserGetVal(user);
+        if (user == null) {
+            user = EmptyUserGetVal(user);
         }
         questionDTO.setUser(user);
         return questionDTO;
@@ -142,7 +146,7 @@ public class QuestionService {
             questionExample.createCriteria()
                     .andIdEqualTo(question.getId());
             int i = questionMapper.updateByExampleSelective(question, questionExample);
-            if (i!=1) {
+            if (i != 1) {
                 throw new CustomizeException(CustomizeErrorCodeImpl.RUSULT_NOT_FOUND);
             }
         }
@@ -165,5 +169,33 @@ public class QuestionService {
         record.setViewCount(1);
         record.setId(id);
         questionExtMapper.incView(record);
+    }
+
+
+    /**
+     * 得到相关的问题
+     *
+     * @param queryDTO
+     * @return
+     */
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        String tag = queryDTO.getTag();
+        if (StringUtils.isBlank(tag)) {
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(tag, ",");
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questionRelatedList = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> QuestionRelatedDTO = questionRelatedList.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+
+        return QuestionRelatedDTO;
     }
 }

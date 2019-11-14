@@ -4,10 +4,7 @@ import com.skyskin.community.dto.CommentDTO;
 import com.skyskin.community.enums.CommentEnum;
 import com.skyskin.community.exception.CustomizeErrorCodeImpl;
 import com.skyskin.community.exception.CustomizeException;
-import com.skyskin.community.mapper.CommentMapper;
-import com.skyskin.community.mapper.QuestionExtMapper;
-import com.skyskin.community.mapper.QuestionMapper;
-import com.skyskin.community.mapper.UserMapper;
+import com.skyskin.community.mapper.*;
 import com.skyskin.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
 
     /**
      * 进行对于问题的评论或进行对于评论的评论
@@ -69,6 +69,9 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCodeImpl.COMMENT_NOT_FOUND);
             }
             commentMapper.insertSelective(comment);
+            //在对于评论进行完回复后进行评论下面的二级评论数增加
+            dbcomment.setCommentCount(1);
+            commentExtMapper.incCommentCount(dbcomment);
 
         } else {
             //回复问题

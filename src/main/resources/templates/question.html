@@ -22,16 +22,24 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                 <h3><span th:text="${questionDTO.title}"></span></h3>
                 <span class="text-desc">
-							作者 <span th:text="${questionDTO.user.name}"></span> |
-							<span th:text="${questionDTO.commentCount}"></span>个评论 |
-							<span th:text="${questionDTO.viewCount}"></span>次浏览 |
-							<span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
+							作者: <span th:text="${questionDTO.user.name}" class="question-author"></span> |
+							评论数:<span th:text="${questionDTO.commentCount}"></span> |
+							浏览数:<span th:text="${questionDTO.viewCount}"></span> |
+							<span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
 						</span>
                 <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <p th:text="${questionDTO.description}"></p>
                 </div>
                 <hr class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <span  th:each="tag: ${questionDTO.tag.split(',')}" class="label label-info question-tags">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        <a class="label " th:text="${tag}">
+                        </a>
+                    </span>
+                </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <a th:href="@{'/publish/'+${questionDTO.id}}" class="skymenu "
                        th:if="${session.user!=null && session.user.id==questionDTO.user.id}">
@@ -82,7 +90,7 @@
 										</span>
                                 <span class="operate"><a th:data-id="${comment.id}" class="twocontent" th:mark="close"
                                                          onclick="collapseComments(this)"><i
-                                        class="glyphicon glyphicon-comment"></i><b class="count">&nbsp;0</b></a></span>
+                                        class="glyphicon glyphicon-comment"></i><b class="count" th:text="'&nbsp;'+${comment.commentCount}"></b></a></span>
                                 <span class="pull-right"
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
                             </div>
@@ -90,7 +98,6 @@
                             <!--二级评论-->
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 two-content-list collapse"
                                  th:id="${'comment-'+comment.id}">
-
 
                                 <!--二级评论预定义的结果-->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hide" th:if="${session.user!= null}"
@@ -210,6 +217,8 @@
         <!--右边信息块-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 ">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 section">
+                <a th:if="${session.user!= null}" th:href="@{'https://github.com/'+${session.user.name}}"  class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
                 <h4>发起人</h4>
                 <div class="media">
                     <div class="media-left">
@@ -224,7 +233,16 @@
             </div>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <img src="/img/rightimg.jpg" class="img-thumbnail"/>
+            </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
+                <ul th:each="Relatedquestion: ${Relatedquestions}" class="Relatedquestion-ul">
+                    <li>
+                        <a th:href="@{'/question/'+${Relatedquestion.id}}" th:text="${Relatedquestion.title}"></a>
+                    </li>
+                </ul>
 
             </div>
         </div>
