@@ -37,4 +37,31 @@ public class UserService {
         }
 
     }
+
+    /**
+     * 得到所有的用户，该方法只在测试阶段使用
+     * @return
+     */
+    public List<User> getAllUser() {
+        List<User> users = userMapper.selectByExample(new UserExample());
+        return users;
+    }
+
+
+    /**
+     * 根据id查询用户
+     * @param id
+     * @return
+     */
+    public User selectUserById(Long id) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andIdEqualTo(id);
+        List<User> users = userMapper.selectByExample(userExample);
+
+        if (users.size()!=0) {
+            return users.get(0);
+        }
+        return null;
+
+    }
 }

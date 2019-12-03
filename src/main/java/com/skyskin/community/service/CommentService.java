@@ -2,6 +2,8 @@ package com.skyskin.community.service;
 
 import com.skyskin.community.dto.CommentDTO;
 import com.skyskin.community.enums.CommentEnum;
+import com.skyskin.community.enums.NotificationStatusEnum;
+import com.skyskin.community.enums.NotificationTypeEnum;
 import com.skyskin.community.exception.CustomizeErrorCodeImpl;
 import com.skyskin.community.exception.CustomizeException;
 import com.skyskin.community.mapper.*;
@@ -39,14 +41,18 @@ public class CommentService {
     @Autowired
     private CommentExtMapper commentExtMapper;
 
+    @Autowired NotificationMapper notificationMapper;
+
+
 
     /**
      * 进行对于问题的评论或进行对于评论的评论
      *
      * @param comment
+     * @param commentator
      */
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentator) {
         //如果没有父类ID则抛出错误，还没选择问题或者评论进行回复
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             //该错误会被 CustomizeExceptionHandler 捕获 进行页面的返回，而非使用json返回，这里需要优化
@@ -68,10 +74,18 @@ public class CommentService {
             if (dbcomment == null) {
                 throw new CustomizeException(CustomizeErrorCodeImpl.COMMENT_NOT_FOUND);
             }
+            Question question = questionMapper.selectByPrimaryKey(dbcomment.getParentId());
+            //问题不存在，直接抛出异常
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCodeImpl.QUESTION_NOT_FOUND);
+            }
             commentMapper.insertSelective(comment);
             //在对于评论进行完回复后进行评论下面的二级评论数增加
             dbcomment.setCommentCount(1);
             commentExtMapper.incCommentCount(dbcomment);
+            // 进行通知增加
+            createNotification(dbcomment, dbcomment.getCommentator(), commentator, question.getTitle(),NotificationTypeEnum.REPLY_COMMENT);
+
 
         } else {
             //回复问题
@@ -84,14 +98,37 @@ public class CommentService {
             //评论数更新
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
+            // 进行通知
+            createNotification(comment,question.getCreator(), commentator,question.getTitle(),NotificationTypeEnum.REPLY_QUESTION);
+
         }
 
     }
 
+    private void createNotification(Comment comment, Long receiver, User commentator, String outerTitle, NotificationTypeEnum notificationTypeEnum) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationTypeEnum.getType());
+        notification.setOuterid(comment.getParentId());
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(commentator.getName());
+        notification.setNotifieravatarurl(commentator.getAvatarUrl());
+        notification.setOuterTitle(outerTitle);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notificationMapper.insertSelective(notification);
+    }
 
+
+    /**
+     * 根据对于的评论的ID得到该评论下的二级评论
+     * @param id
+     * @param type
+     * @return
+     */
     public List<CommentDTO> listByTargetId(Long id, CommentEnum type) {
         CommentExample example = new CommentExample();
-        //设置匹配当前父类ID并且要是类型为 CommentEnum.QUESTION
+        //设置匹配当前父类ID并且要是类型为 CommentEnum.UNREAD
         example.createCriteria()
                 .andParentIdEqualTo(id)
                 .andTypeEqualTo(type.getType());

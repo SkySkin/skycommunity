@@ -38,7 +38,7 @@ function post(postId, type) {
                         var pathname = window.location.pathname;
                         var search = window.location.search;
                         var subpath = "";
-                        window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://localhost:8889/callback?uri=" + subpath + "");
+                        window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://192.168.1.202:8889/callback?uri=" + subpath + "");
                         window.localStorage.setItem("closeable", true);
                     }
                 } else {
@@ -149,7 +149,7 @@ function logsub() {
     var search = window.location.search;
     var subpath = pathname + search;
     window.close();
-    window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://localhost:8889/callback?uri=" + subpath + "");
+    window.open("https://github.com/login/oauth/authorize?client_id=1d26332cf6655bb56e0e&scope=user&state=1&redirect_uri=http://192.168.1.202:8889/callback?uri=" + subpath + "");
     // window.localStorage.setItem("closeable", true);
 
 }
@@ -158,12 +158,34 @@ function timestampToTime(timestamp) {
     var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
     var Y = date.getFullYear() + '-';
     var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    var D = date.getDate() + ' ';
-    var h = date.getHours() + ':';
-    var m = date.getMinutes();
+    var D = date.getDate() < 10 ? '0'+date.getDate() : date.getDate() ;
+    var h = ' '+date.getHours() + ':';
+    var m = date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes();
     // var s = date.getSeconds();
     return Y + M + D + h + m;
 }
+
+
+//问题标签的输入
+function selectTag(tagValue) {
+    var value = $($(tagValue).children(".label")[0]).html();
+    var provious = $("#tag ").val();
+    if (provious.indexOf(value) == -1) {
+        if(provious){
+            $("#tag").val(provious+","+value)
+        }else {
+            $("#tag").val(value)
+        }
+    }
+
+}
+
+//标签框的展示
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+
 
 // function createNewComment(content) {
 //     var commentItem = $("#comment_item");

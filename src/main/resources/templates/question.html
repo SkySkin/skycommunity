@@ -238,12 +238,19 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
+            </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <ul th:each="Relatedquestion: ${Relatedquestions}" class="Relatedquestion-ul">
                     <li>
                         <a th:href="@{'/question/'+${Relatedquestion.id}}" th:text="${Relatedquestion.title}"></a>
                     </li>
                 </ul>
-
+                <ul th:if="${Relatedquestions.size()==0}" class="Relatedquestion-ul">
+                    <li>
+                        <span style="color: #999999;">暂时没有相关问题</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

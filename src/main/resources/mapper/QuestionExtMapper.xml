@@ -39,6 +39,6 @@
         *
         from QUESTION
         where TAG regexp  #{tag}
-        and id!=#{id}
+        and id!=#{id}  order by   GMT_CREATE desc limit 0,20
     </select>
 </mapper>

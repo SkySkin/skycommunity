@@ -17,17 +17,19 @@ import java.util.List;
 /* 封装分页需要返回的数据结构*/
 
 @Data
-public class PageInfoDTO {
-    private List<QuestionDTO> questionDTOS;
+public class PageInfoDTO<T> {
+    private List<T> dataType;
     private boolean showPrevious;
     private boolean showNext;
     private boolean showFirstPage;
     private boolean showEndPage;
+    private Integer totalCount;
     private Integer page;
     private Integer totalPage;
     private List<Integer> pages=new ArrayList<>();
 
     public PageInfoDTO(Integer totalCount, Integer page, Integer size) {
+        this.totalCount=totalCount;
         //定义总页数
         if (totalCount % size == 0) {
             totalPage = totalCount / size;

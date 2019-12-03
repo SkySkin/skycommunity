@@ -15,6 +15,7 @@ public enum  CustomizeErrorCodeImpl implements CustomizeErrorCode {
     COMMENT_NOT_FOUND(2003, "该评论找不到了,不然换个试试  (●´∀｀●)"),
     QUESTION_NOT_FOUND(2004, "该问题找不到了,不然换个试试  (●´∀｀●)"),
     COMMENT_CONTENT_ISEMPTY(2005, "你怎么能回复空的呢  (●´∀｀●)"),
+    NOT_LOGIN(2006, "请先登陆哦  (●´∀｀●)"),
     ;
 
     private String message;

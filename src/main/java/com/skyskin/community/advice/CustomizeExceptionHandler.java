@@ -30,7 +30,7 @@ public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     Object handler(HttpServletRequest request, Throwable e, Model model, HttpServletResponse response) {
         e.printStackTrace();
-//        HttpStatus status = getStatus(request);
+//        HttpStatus status = getType(request);
         //===修改码mark=1000 对于返回的信息格式进行逻辑处理【text/html,application/json  】===
         //得到数据的格式
         String contentType = request.getContentType();
@@ -76,7 +76,7 @@ public class CustomizeExceptionHandler {
 
 
 //获取状态码。
-//    private HttpStatus getStatus(HttpServletRequest request) {
+//    private HttpStatus getType(HttpServletRequest request) {
 //        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 //        if (statusCode == null) {
 //            return HttpStatus.INTERNAL_SERVER_ERROR;

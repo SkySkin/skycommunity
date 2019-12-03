@@ -21,7 +21,7 @@
             <hr>
 
             <form action="/publish" method="post">
-                <input type="hidden"  name="id" th:value="${id}">
+                <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题 (简单扼要):</label>
                     <input type="text" th:value="${title}" class="form-control" name="title" id="title"
@@ -35,11 +35,30 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="tag">添加标签:</label>
+                    <label for="tag">添加标签:</label>s
                     <input type="text" th:value="${tag}" class="form-control" name="tag" id="tag"
-                           placeholder="输入标签以英文,号分割">
-                </div>
+                           placeholder="请点击下方标签库中的标签" onclick="showSelectTag()" />
+                    <div id="select-tag" >
+                        <div>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" th:each="tags : ${tagsDTOS}" th:class="${tags.getCategoryName().split(',')[1].equals('developmentlang')? 'active':''}"><a th:href="'#'+${tags.getCategoryName().split(',')[1]}" th:aria-controls="${tags.getCategoryName().split(',')[1]}" role="tab" th:text="${tags.getCategoryName().split(',')[0]}" data-toggle="tab"></a></li>
+                            </ul>
 
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel"  th:class="${selectCategory.getCategoryName().split(',')[1].equals('developmentlang')? 'tab-pane active':'tab-pane'}"  th:each="selectCategory : ${tagsDTOS}"  th:id="${selectCategory.getCategoryName().split(',')[1]}" >
+                                    <span class="label label-info question-tags" th:each="tag : ${selectCategory.tags}" th:onclick="'selectTag(this)'">
+                                        <span class="glyphicon glyphicon-tags"></span>
+                                        <a class="label" th:text="${tag}" >
+                                         </a>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                 <div class="container-fluid main">
                     <div class="row">
                         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">

@@ -48,6 +48,7 @@ import lombok.Data;
 @Data
 public class GithubUser {
     private String name;
+    private String login;
     private Long id;
     //描述
     private String bio;

@@ -13,7 +13,7 @@ public enum NotificationTypeEnum {
     REPLY_COMMENT(2,"回复了评论")
     ;
     private int type;//状态
-    private String name;//类型名称
+    private String name;//类型名称prof
 
     public int getType() {
         return type;
@@ -26,5 +26,15 @@ public enum NotificationTypeEnum {
     NotificationTypeEnum(int type, String name) {
         this.type = type;
         this.name = name;
+    }
+
+    public static String nameOfType(int type){
+        for (NotificationTypeEnum notificationTypeEnum : NotificationTypeEnum.values()) {
+            if (notificationTypeEnum.getType()==type) {
+                return notificationTypeEnum.getName();
+            }
+        }
+        return "";
+
     }
 }

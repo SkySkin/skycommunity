@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +44,7 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         Integer totalCount = (int) questionMapper.countByExample(example);
         //得到实例，以及设置page数据的值
-        PageInfoDTO pageInfoDTO = new PageInfoDTO(totalCount, page, size);
+        PageInfoDTO<QuestionDTO> pageInfoDTO = new PageInfoDTO(totalCount, page, size);
         //公式: ((page-1)*5),5
         Integer offset = (pageInfoDTO.getPage() - 1) * size;
         QuestionExample questionExample = new QuestionExample();
@@ -63,7 +62,7 @@ public class QuestionService {
             BeanUtils.copyProperties(question, questionDTO);
             questionDTOS.add(questionDTO);
         }
-        pageInfoDTO.setQuestionDTOS(questionDTOS);
+        pageInfoDTO.setDataType(questionDTOS);
 
         return pageInfoDTO;
     }
@@ -106,7 +105,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-        pageInfoDTO.setQuestionDTOS(questionDTOS);
+        pageInfoDTO.setDataType(questionDTOS);
 
         return pageInfoDTO;
 
@@ -197,5 +196,17 @@ public class QuestionService {
         }).collect(Collectors.toList());
 
         return QuestionRelatedDTO;
+    }
+
+    /**
+     * 根据用户id进行问题数的查询
+     * @param id
+     * @return
+     */
+    public Long selectQuestionCount(Long id) {
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria().andCreatorEqualTo(id);
+        return questionMapper.countByExample(questionExample);
+
     }
 }
