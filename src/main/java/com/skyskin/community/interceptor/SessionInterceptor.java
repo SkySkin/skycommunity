@@ -3,6 +3,7 @@ package com.skyskin.community.interceptor;
 import com.skyskin.community.mapper.UserMapper;
 import com.skyskin.community.model.User;
 import com.skyskin.community.model.UserExample;
+import com.skyskin.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +24,8 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
     //在执行实际处理程序之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,6 +45,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                         if (users.size()!=0) {
                             User user = users.get(0);
                             if (user != null) {
+                                Long aLong = notificationService.selectNewNotifactionCount(user.getId());
+                                user.setNotificationCount(Integer.parseInt(aLong+""));
                                 request.getSession().setAttribute("user", user);
 //                                System.out.println("set Session");
                             }
