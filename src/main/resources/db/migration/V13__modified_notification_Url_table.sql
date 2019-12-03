@@ -1,0 +1,2 @@
+ALTER TABLE NOTIFICATION ADD notifierAvatarUrl int NULL;
+    COMMENT ON COLUMN NOTIFICATION.notifierAvatarUrl IS '发送人头像';
