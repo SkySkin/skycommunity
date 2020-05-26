@@ -11,7 +11,7 @@ public enum  CommentEnum {
     COMMENT(2, ""),
     SUCCESS(200, "请求成功")
     ;
-    private Integer type;
+    private  Integer type;
     private String Message;
 
     /**

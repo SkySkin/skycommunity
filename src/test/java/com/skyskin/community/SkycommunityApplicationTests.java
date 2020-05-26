@@ -12,5 +12,8 @@ public class SkycommunityApplicationTests {
     @Test
     public void contextLoads() {
     }
+    private final void shpwsd(){
+
+    }
 
 }
