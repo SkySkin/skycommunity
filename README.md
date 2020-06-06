@@ -51,7 +51,7 @@ create table USER
 ```
 ## 笔记
 安装必备工具  
- JDK，Maven  
+ JDK,Maven  
  克隆代码到本地  
  运行命令创建数据库脚本  
  ```bash
